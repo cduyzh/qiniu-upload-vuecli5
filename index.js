@@ -17,7 +17,7 @@ const successUnloadLog = ".success_upload_log.json";
 const failedUploadLog = ".faile_upload_log.json";
 const log = console.log;
 
-class UploadToQiniuWebpackPlugin {
+class Upload2QiniuPlugin {
   constructor(options) {
     this.options = _extend(
       {
@@ -91,7 +91,7 @@ class UploadToQiniuWebpackPlugin {
     (compiler.hooks
       ? compiler.hooks.afterEmit.tapAsync.bind(
           compiler.hooks.afterEmit,
-          "UploadToQiniuWebpackPlugin"
+          "Upload2QiniuPlugin "
         )
       : compiler.plugin.bind(compiler, "afterEmit"))(
       (compilation, callback) => {
@@ -339,4 +339,4 @@ class UploadToQiniuWebpackPlugin {
   }
 }
 
-module.exports = UploadToQiniuWebpackPlugin;
+module.exports = Upload2QiniuPlugin;

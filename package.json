@@ -1,14 +1,13 @@
 {
-  "name": "vue-cli-plugin-upload-qiniu",
+  "name": "qiniu-upload-vuecli5",
   "version": "1.0.0",
   "description": "Vue3 , vue-cli5 plugins for qiniu upload.",
   "main": "index.js",
   "scripts": {
-    "test": "webpack --config examples/webpack.config.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cduyzh/vue-cli-plugin-upload-qiniu.git"
+    "url": "git+https://github.com/cduyzh/qiniu-upload-vuecli5.git"
   },
   "keywords": [
     "webpack",
@@ -22,9 +21,9 @@
   "author": "cduyzh",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cduyzh/vue-cli-plugin-upload-qiniu/issues"
+    "url": "https://github.com/cduyzh/qiniu-upload-vuecli5/issues"
   },
-  "homepage": "https://github.com/cduyzh/vue-cli-plugin-upload-qiniu#readme",
+  "homepage": "https://github.com/cduyzh/qiniu-upload-vuecli5#readme",
   "devDependencies": {
     "webpack": "^5.25.0",
     "webpack-command": "^0.5.0"

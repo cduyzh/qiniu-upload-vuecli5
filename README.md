@@ -3,18 +3,18 @@
     <img width="200" height="200"
       src="https://webpack.js.org/assets/icon-square-big.svg">
   </a>
-  <h1>Upload To Qiniu vue-cli4|5 Webpack Plugin</h1>
+  <h1>Upload To Qiniu vue-cli5 Webpack Plugin</h1>
   <p>A plugin upload file to qiniu clound for vue-cli4|vue-cli5</p>
 </div>
 
 <h2 align="center">Install</h2>
 
 ```bash
-  npm i --save-dev vue-cli-plugin-qiniu-upload
+  npm i --save-dev qiniu-upload-vuecli5
 ```
 
 ```bash
-  yarn add vue-cli-plugin-qiniu-upload --dev
+  yarn add qiniu-upload-vuecli5 --dev
 ```
 
 <h2 align="center">Usage</h2>
@@ -22,7 +22,7 @@
 **vue.config.js**
 
 ```js
-const qiniuUploadPlugin = require("vue-cli-plugin-qiniu-upload");
+const Upload2QiniuPlugin = require("qiniu-upload-vuecli5");
 
 module.exports = {
   entry: "index.js",
@@ -31,7 +31,7 @@ module.exports = {
     filename: "index_bundle.js",
   },
   plugins: [
-    new qiniuUploadPlugin({
+    new Upload2QiniuPlugin({
       qiniuAccessKey: "xxxx",
       qiniuSecretKey: "xxxxx",
       qiniuBucket: "xxx",
@@ -43,7 +43,7 @@ module.exports = {
 
 <h2 align="center">Options</h2>
 
-You can pass a hash of configuration options to `vue-cli-plugin-qiniu-upload`.
+You can pass a hash of configuration options to `qiniu-upload-vuecli5`.
 Allowed values are as follows
 
 |            Name            |    Type     |                                        Default                                        | Description                                                                                             |
