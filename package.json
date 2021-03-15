@@ -1,6 +1,6 @@
 {
   "name": "qiniu-upload-vuecli5",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Vue3 , vue-cli5 plugins for qiniu upload.",
   "main": "index.js",
   "scripts": {
