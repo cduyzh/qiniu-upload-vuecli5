@@ -1,11 +1,9 @@
 "use strict";
-// use Polyfill for util.promisify in node versions < v8
 const promisify = require("util.promisify");
 
 const qiniu = require("qiniu");
 const fs = require("fs");
 const path = require("path");
-const moment = require("moment");
 const _array = require("lodash/array");
 const _extend = require("lodash/extend");
 const hideFile = require("hideFile");
@@ -13,8 +11,6 @@ const chalk = require("chalk");
 const fsStatPromise = promisify(fs.stat);
 const fsReadDirPromise = promisify(fs.readdir);
 
-const successUnloadLog = ".success_upload_log.json";
-const failedUploadLog = ".faile_upload_log.json";
 const log = console.log;
 
 class Upload2QiniuPlugin {
@@ -75,19 +71,7 @@ class Upload2QiniuPlugin {
       _this.options.uploadLogPath = compiler.options.context;
     }
 
-    try {
-      let statInstance = fs.statSync(
-        path.resolve(_this.options.uploadLogPath, successUnloadLog)
-      );
-      if (statInstance.isFile()) {
-        this.successUploadFilesData = JSON.parse(
-          fs.readFileSync(
-            path.resolve(_this.options.uploadLogPath, successUnloadLog),
-            "utf8"
-          )
-        );
-      }
-    } catch (err) {}
+
     (compiler.hooks
       ? compiler.hooks.afterEmit.tapAsync.bind(
           compiler.hooks.afterEmit,
@@ -205,7 +189,6 @@ class Upload2QiniuPlugin {
         if (_this.options.enabledRefresh) {
           _this.refreshInCloud(_this.needUploadArray || []);
         } else {
-          _this.writeLog();
           _this.callback();
         }
       });
@@ -214,38 +197,9 @@ class Upload2QiniuPlugin {
       if (this.options.enabledRefresh) {
         this.refreshInCloud(this.needUploadArray || []);
       } else {
-        this.writeLog();
         this.callback();
       }
     }
-  }
-
-  writeLog() {
-    if (!this.allUploadIsSuccess || !this.allRefreshIsSuccess) {
-      for (let key in this.failedObj.uploadFiles) {
-        delete this.successUploadLogData[key];
-      }
-      fs.writeFile(
-        path.resolve(this.options.uploadLogPath, failedUploadLog),
-        JSON.stringify(this.failedObj),
-        "utf8",
-        (err) => {
-          if (err) {
-            console.error(`Error:${err}\r\n`);
-          }
-        }
-      );
-    }
-    fs.writeFile(
-      path.resolve(this.options.uploadLogPath, successUnloadLog),
-      JSON.stringify(this.successUploadLogData),
-      "utf8",
-      (err) => {
-        if (err) {
-          console.error("Unload File Log  Write Failed\r\n");
-        }
-      }
-    );
   }
 
   refreshInCloud(needRefreshArr = []) {
@@ -289,7 +243,6 @@ class Upload2QiniuPlugin {
           log(chalk.green("Finish upload files to qiniu cloud \n"));
         }
         if (index === refreshQueue.length - 1) {
-          _this.writeLog();
           _this.callback();
         }
       });
