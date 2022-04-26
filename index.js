@@ -1,6 +1,6 @@
 "use strict";
 const promisify = require("util.promisify");
-
+const dayjs = require("dayjs");
 const qiniu = require("qiniu");
 const fs = require("fs");
 const path = require("path");
@@ -13,7 +13,7 @@ const fsReadDirPromise = promisify(fs.readdir);
 
 const log = console.log;
 
-class Upload2QiniuPlugin {
+class UploadThirdpartyCloud {
   constructor(options) {
     this.options = _extend(
       {
@@ -49,7 +49,6 @@ class Upload2QiniuPlugin {
     };
     this.needUploadArray = [];
     this.successUploadFilesData = {};
-    this.successUploadLogData = {};
 
     this.uploadCount = 0;
     this.fileCount = 0;
@@ -71,11 +70,10 @@ class Upload2QiniuPlugin {
       _this.options.uploadLogPath = compiler.options.context;
     }
 
-
     (compiler.hooks
       ? compiler.hooks.afterEmit.tapAsync.bind(
           compiler.hooks.afterEmit,
-          "Upload2QiniuPlugin "
+          "UploadThirdpartyCloud "
         )
       : compiler.plugin.bind(compiler, "afterEmit"))(
       (compilation, callback) => {
@@ -92,9 +90,6 @@ class Upload2QiniuPlugin {
             if (_this.successUploadFilesData[key]) {
               delete _this.successUploadFilesData[key];
             }
-            _this.successUploadLogData[key] = new moment().format(
-              "YYYY-MM-DD HH:mm:ss"
-            );
             _this.needUploadArray.push(item);
 
             if (_this.needUploadArray.length == _this.fileCount) {
@@ -131,7 +126,7 @@ class Upload2QiniuPlugin {
       (err, respBody, respInfo) => {
         if (err) {
           this.allUploadIsSuccess = false;
-          this.failedObj.uploadFiles[key] = new moment().format(
+          this.failedObj.uploadFiles[key] = dayjs().format(
             "YYYY-MM-DD HH:mm:ss"
           );
           console.error(` ${key}  Upload Failed!!`);
@@ -292,4 +287,4 @@ class Upload2QiniuPlugin {
   }
 }
 
-module.exports = Upload2QiniuPlugin;
+module.exports = UploadThirdpartyCloud;

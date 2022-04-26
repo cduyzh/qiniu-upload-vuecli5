@@ -1,20 +1,20 @@
 <div align="center">
-  <a href="https://github.com/webpack/webpack">
+  <a href="https://cli.vuejs.org/">
     <img width="200" height="200"
-      src="https://webpack.js.org/assets/icon-square-big.svg">
+      src="https://cli.vuejs.org/favicon.png">
   </a>
-  <h1>Upload To Qiniu vue-cli5 Webpack Plugin</h1>
+  <h1>Upload To Thirdparty cloud vue-cli-Plugin</h1>
   <p>A plugin upload file to qiniu clound for vue-cli4|vue-cli5</p>
 </div>
 
 <h2 align="center">Install</h2>
 
 ```bash
-  npm i --save-dev qiniu-upload-vuecli5
+  npm i --save-dev vue-cli-plugin-upload
 ```
 
 ```bash
-  yarn add qiniu-upload-vuecli5 --dev
+  yarn add vue-cli-plugin-upload -D
 ```
 
 <h2 align="center">Usage</h2>
@@ -22,30 +22,19 @@
 **vue.config.js**
 
 ```js
-const Upload2QiniuPlugin = require("qiniu-upload-vuecli5");
-
-module.exports = {
-  entry: "index.js",
-  output: {
-    path: __dirname + "/dist",
-    filename: "index_bundle.js",
-  },
-  plugins: [
-    new Upload2QiniuPlugin({
-      qiniuAccessKey: "xxxx",
-      qiniuSecretKey: "xxxxx",
-      qiniuBucket: "xxx",
-      qiniuZone: "Zone_z0",
-    }),
-  ],
-};
+new UploadThirdpartyCloud({
+    qiniuAccessKey: "xxxx",
+    qiniuSecretKey: "xxxxx",
+    qiniuBucket: "xxx",
+    qiniuZone: "Zone_z0",
+}),
 ```
 
 <h2 align="center">Options</h2>
 
-You can pass a hash of configuration options to `qiniu-upload-vuecli5`.
+You can pass a hash of configuration options to `vue-cli-plugin-upload`.
 Allowed values are as follows
-
+### qiniu cloud Options
 |            Name            |    Type     |                                        Default                                        | Description                                                                                             |
 | :------------------------: | :---------: | :-----------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------ |
 | **[`qiniuAccessKey`](#)**  | `{String}`  |                                        `null`                                         | Your Qiniu AccessKey                                                                                    |
@@ -67,3 +56,6 @@ About [Zone](https://developer.qiniu.com/kodo/sdk/1289/nodejs):
 | **[`华北`](#)** | "Zone_z1"  |
 | **[`华南`](#)** | "Zone_z2"  |
 | **[`北美`](#)** | "Zone_na0" |
+
+### TODO LIST:
+- [x] support AWS Cloud

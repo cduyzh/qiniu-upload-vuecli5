@@ -1,38 +1,39 @@
 {
-  "name": "qiniu-upload-vuecli5",
-  "version": "1.0.2",
-  "description": "Vue3 , vue-cli5 plugins for qiniu upload.",
-  "main": "index.js",
-  "scripts": {
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/cduyzh/qiniu-upload-vuecli5.git"
-  },
-  "keywords": [
-    "webpack",
-    "plugin",
-    "qiniu",
-    "upload",
-    "vue-cli",
-    "vue3",
-    "vue-cli5"
-  ],
-  "author": "cduyzh",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/cduyzh/qiniu-upload-vuecli5/issues"
-  },
-  "homepage": "https://github.com/cduyzh/qiniu-upload-vuecli5#readme",
-  "devDependencies": {
-    "webpack": "^5.25.0",
-    "webpack-command": "^0.5.0"
-  },
-  "dependencies": {
-    "chalk": "^4.1.0",
-    "hidefile": "^3.0.0",
-    "lodash": "4.17.21",
-    "qiniu": "^7.3.2",
-    "util.promisify": "^1.1.1"
-  }
+    "name": "vue-cli-plugin-upload",
+    "version": "1.0.0",
+    "description": "Vue3,vue-cli-plugin-upload for qiniu(七牛)|aws(亚马逊) cloud upload. support @vue/cli-service 5.0.x",
+    "main": "index.js",
+    "scripts": {},
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/cduyzh/vue-cli-plugin-upload.git"
+    },
+    "homepage": "https://github.com/cduyzh/vue-cli-plugin-upload#readme",
+    "keywords": [
+        "vue3",
+        "vue-cli-plugin",
+        "webpack",
+        "plugin",
+        "qiniu",
+        "aws",
+        "@vue/cli-service",
+        "upload"
+    ],
+    "author": "cduyzh",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/cduyzh/vue-cli-plugin-upload/issues"
+    },
+    "devDependencies": {
+        "webpack": "^5.25.0",
+        "webpack-command": "^0.5.0"
+    },
+    "dependencies": {
+        "chalk": "4.1.2",
+        "hidefile": "^3.0.0",
+        "lodash": "4.17.21",
+        "qiniu": "^7.5.0",
+        "util.promisify": "^1.1.1",
+        "dayjs": "1.11.1"
+    }
 }
