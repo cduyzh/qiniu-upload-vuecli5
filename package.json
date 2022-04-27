@@ -1,9 +1,10 @@
 {
     "name": "webpack-plugin-qiniu-upload",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Vue3,webpack-plugin-qiniu-upload for qiniu(七牛)|aws(亚马逊) cloud upload. support @vue/cli-service 5.0.x",
     "main": "index.js",
-    "scripts": {},
+    "scripts": {
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/cduyzh/webpack-plugin-qiniu-upload.git"
@@ -25,15 +26,14 @@
         "url": "https://github.com/cduyzh/webpack-plugin-qiniu-upload/issues"
     },
     "devDependencies": {
-        "webpack": "^5.72.0",
-        "webpack-command": "^0.5.1"
+        "webpack": "^5.72.0"
     },
     "dependencies": {
         "chalk": "4.1.2",
+        "dayjs": "1.11.1",
         "hidefile": "^3.0.0",
         "lodash": "4.17.21",
         "qiniu": "^7.5.0",
-        "util.promisify": "^1.1.1",
-        "dayjs": "1.11.1"
+        "util.promisify": "^1.1.1"
     }
 }

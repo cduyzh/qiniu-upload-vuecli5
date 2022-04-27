@@ -5,6 +5,11 @@
   </a>
   <h1>Upload To qiniu cloud  webpack|vue-cli-Plugin</h1>
   <p>A plugin upload file to qiniu clound for vue-cli4|vue-cli5</p>
+
+<p align="center">
+    <img src="https://img.shields.io/npm/v/webpack-plugin-qiniu-upload?style=flat-square" alt="npm version" />
+    <img src="https://img.shields.io/npm/dm/webpack-plugin-qiniu-upload.svg?style=flat-square&color=#4fc08d" alt="downloads" />
+</p>
 </div>
 
 <h2 align="center">Install</h2>
