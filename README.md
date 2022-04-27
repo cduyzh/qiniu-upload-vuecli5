@@ -3,18 +3,18 @@
     <img width="200" height="200"
       src="https://cli.vuejs.org/favicon.png">
   </a>
-  <h1>Upload To Thirdparty cloud vue-cli-Plugin</h1>
+  <h1>Upload To qiniu cloud  webpack|vue-cli-Plugin</h1>
   <p>A plugin upload file to qiniu clound for vue-cli4|vue-cli5</p>
 </div>
 
 <h2 align="center">Install</h2>
 
 ```bash
-  npm i --save-dev vue-cli-plugin-upload
+  npm i --save-dev webpack-plugin-qiniu-upload
 ```
 
 ```bash
-  yarn add vue-cli-plugin-upload -D
+  yarn add webpack-plugin-qiniu-upload -D
 ```
 
 <h2 align="center">Usage</h2>
@@ -32,9 +32,11 @@ new UploadThirdpartyCloud({
 
 <h2 align="center">Options</h2>
 
-You can pass a hash of configuration options to `vue-cli-plugin-upload`.
+You can pass a hash of configuration options to `webpack-plugin-qiniu-upload`.
 Allowed values are as follows
+
 ### qiniu cloud Options
+
 |            Name            |    Type     |                                        Default                                        | Description                                                                                             |
 | :------------------------: | :---------: | :-----------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------ |
 | **[`qiniuAccessKey`](#)**  | `{String}`  |                                        `null`                                         | Your Qiniu AccessKey                                                                                    |
@@ -56,6 +58,3 @@ About [Zone](https://developer.qiniu.com/kodo/sdk/1289/nodejs):
 | **[`华北`](#)** | "Zone_z1"  |
 | **[`华南`](#)** | "Zone_z2"  |
 | **[`北美`](#)** | "Zone_na0" |
-
-### TODO LIST:
-- [x] support AWS Cloud
