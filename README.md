@@ -22,12 +22,19 @@
 **vue.config.js**
 
 ```js
-new UploadThirdpartyCloud({
-    qiniuAccessKey: "xxxx",
-    qiniuSecretKey: "xxxxx",
-    qiniuBucket: "xxx",
-    qiniuZone: "Zone_z0",
-}),
+const UploadQiNiuPlugin = require("webpack-plugin-thirdparty-upload");
+
+module.exports = {
+  ...,
+  plugins: [
+    new UploadQiNiuPlugin({
+      qiniuAccessKey: "xxxx",
+      qiniuSecretKey: "xxxxx",
+      qiniuBucket: "xxx",
+      qiniuZone: "Zone_z0",
+    }),
+  ],
+};
 ```
 
 <h2 align="center">Options</h2>

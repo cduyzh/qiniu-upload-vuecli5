@@ -13,7 +13,7 @@ const fsReadDirPromise = promisify(fs.readdir);
 
 const log = console.log;
 
-class UploadThirdpartyCloud {
+class UploadQiNiuPlugin {
   constructor(options) {
     this.options = _extend(
       {
@@ -73,7 +73,7 @@ class UploadThirdpartyCloud {
     (compiler.hooks
       ? compiler.hooks.afterEmit.tapAsync.bind(
           compiler.hooks.afterEmit,
-          "UploadThirdpartyCloud "
+          "UploadQiNiuPlugin "
         )
       : compiler.plugin.bind(compiler, "afterEmit"))(
       (compilation, callback) => {
@@ -287,4 +287,4 @@ class UploadThirdpartyCloud {
   }
 }
 
-module.exports = UploadThirdpartyCloud;
+module.exports = UploadQiNiuPlugin;
