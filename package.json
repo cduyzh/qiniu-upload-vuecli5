@@ -30,7 +30,6 @@
     },
     "dependencies": {
         "chalk": "4.1.2",
-        "dayjs": "1.11.1",
         "hidefile": "^3.0.0",
         "lodash": "4.17.21",
         "qiniu": "^7.5.0",

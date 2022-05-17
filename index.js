@@ -1,13 +1,13 @@
 "use strict";
 const promisify = require("util.promisify");
-const dayjs = require("dayjs");
 const qiniu = require("qiniu");
 const fs = require("fs");
 const path = require("path");
 const _array = require("lodash/array");
 const _extend = require("lodash/extend");
-const hideFile = require("hideFile");
+const hideFile = require("hidefile");
 const chalk = require("chalk");
+
 const fsStatPromise = promisify(fs.stat);
 const fsReadDirPromise = promisify(fs.readdir);
 
@@ -57,7 +57,6 @@ class UploadQiNiuPlugin {
   }
   apply(compiler) {
     const _this = this;
-
     if (!_this.options.uploadTarget) {
       _this.options.uploadTarget = compiler.options.output.path;
     }
@@ -65,43 +64,44 @@ class UploadQiNiuPlugin {
     if (!_this.options.publicPath) {
       _this.options.publicPath = compiler.options.output.publicPath;
     }
-
     if (!_this.options.uploadLogPath) {
       _this.options.uploadLogPath = compiler.options.context;
     }
 
+    // 如果没有传以上 默认赋值webpack内设置的值
+
     (compiler.hooks
       ? compiler.hooks.afterEmit.tapAsync.bind(
-          compiler.hooks.afterEmit,
-          "UploadQiNiuPlugin "
-        )
+        compiler.hooks.afterEmit,
+        "UploadQiNiuPlugin "
+      )
       : compiler.plugin.bind(compiler, "afterEmit"))(
-      (compilation, callback) => {
-        _this.callback = callback.bind(this);
+        (compilation, callback) => {
+          _this.callback = callback.bind(this);
 
-        log(chalk.black.bgBlue.bold("\nStarting upload"));
+          log(chalk.black.bgBlue.bold("\nStarting upload"));
+          _this.readFilesFormDir(_this.options.uploadTarget).then((paths) => {
+            _this.fileCount = paths.length;
+            log(`${chalk.green("Starting upload files to qiniu cloud")}`);
 
-        _this.readFilesFormDir(_this.options.uploadTarget).then((paths) => {
-          _this.fileCount = paths.length;
-          log(`${chalk.green("Starting upload files to qiniu cloud")}`);
+            paths.forEach((item) => {
+              let key = path.relative(_this.options.uploadTarget, item);
+              console.log(item);
+              if (_this.successUploadFilesData[key]) {
+                delete _this.successUploadFilesData[key];
+              }
+              _this.needUploadArray.push(item);
 
-          paths.forEach((item) => {
-            let key = path.relative(_this.options.uploadTarget, item);
-            if (_this.successUploadFilesData[key]) {
-              delete _this.successUploadFilesData[key];
-            }
-            _this.needUploadArray.push(item);
-
-            if (_this.needUploadArray.length == _this.fileCount) {
-              log(
-                `Uploading ${chalk.red(_this.needUploadArray.length)} files...`
-              );
-              _this.uploadFilesByArr(_this.needUploadArray);
-            }
+              if (_this.needUploadArray.length == _this.fileCount) {
+                log(
+                  `Uploading ${chalk.red(_this.needUploadArray.length)} files...`
+                );
+                _this.uploadFilesByArr(_this.needUploadArray);
+              }
+            });
           });
-        });
-      }
-    );
+        }
+      );
   }
 
   getToken(bucket, key) {
@@ -114,117 +114,60 @@ class UploadQiNiuPlugin {
     return putPolicy.uploadToken(this.mac);
   }
 
-  uploadFile(uptoken, key, localFile) {
+  uploadFile(uptoken, fileName, localFilePath) {
     let formUploader = new qiniu.form_up.FormUploader(this.config),
       putExtra = new qiniu.form_up.PutExtra();
 
     formUploader.putFile(
       uptoken,
-      key,
-      localFile,
+      fileName,
+      localFilePath,
       putExtra,
       (err, respBody, respInfo) => {
         if (err) {
           this.allUploadIsSuccess = false;
-          this.failedObj.uploadFiles[key] = dayjs().format(
-            "YYYY-MM-DD HH:mm:ss"
-          );
-          console.error(` ${key}  Upload Failed!!`);
+          this.failedObj.uploadFiles[fileName] = new Date().toLocaleString()
+          console.error(`files ${fileName}  Upload Failed!!`);
         }
         this.uploadCount++;
+        log(`${chalk.green(`\nupload files ${fileName} success\n`)}`);
 
-        if (this.uploadCount === this.needUploadArray.length) {
-          this.delateFileInCloud();
+        if (this.uploadCount === this.needUploadArray.length && this.options.enabledRefresh) {
+          this.refreshInCloud(this.needUploadArray || []);
         }
       }
     );
   }
 
-  delateFileInCloud() {
-    let _this = this;
-    if (this.allUploadIsSuccess) {
-      log(chalk.black.bgGreen.bold("\nSuccessful"));
-      log(chalk.green("All File Is Upload Successful"));
-    }
-
-    let bucketManager = new qiniu.rs.BucketManager(this.mac, this.config),
-      successDtaKeys = Object.keys(this.successUploadFilesData),
-      successDtaKeysLength = successDtaKeys.length,
-      allFileIsSuccess = true,
-      deleteOperations = [];
-
-    if (successDtaKeysLength !== 0) {
-      successDtaKeys.forEach((key) => {
-        deleteOperations.push(qiniu.rs.deleteOp(this.options.qiniuBucket, key));
-      });
-
-      log(`Deleting ${successDtaKeys.length} Files on CDN \r\n`);
-
-      bucketManager.batch(deleteOperations, function (err, respBody, respInfo) {
-        if (err) {
-          console.error(`Deleting Files Error: ${err}`);
-        } else {
-          // 200 is success, 298 is part success
-          if (parseInt(respInfo.statusCode / 100) == 2) {
-            respBody.forEach(function (item) {
-              if (item.code !== 200) {
-                allFileIsSuccess = false;
-                console.error(`${item}\r\n`);
-              }
-            });
-            if (allFileIsSuccess) {
-              log("All Extra File Is Deleted Form QiniuCloud Successful\r\n");
-            } else {
-              console.error("Some Deleted is Failed\r\n");
-            }
-          } else {
-            log(respBody);
-          }
-        }
-        if (_this.options.enabledRefresh) {
-          _this.refreshInCloud(_this.needUploadArray || []);
-        } else {
-          _this.callback();
-        }
-      });
-    } else {
-      log("There Is Not Have Extra File Need To Delete\r\n");
-      if (this.options.enabledRefresh) {
-        this.refreshInCloud(this.needUploadArray || []);
-      } else {
-        this.callback();
-      }
-    }
-  }
-
   refreshInCloud(needRefreshArr = []) {
-    let cdnManager = new qiniu.cdn.CdnManager(this.mac);
-    if (this.options.onlyRefreshHtml) {
+    const _this = this;
+    let cdnManager = new qiniu.cdn.CdnManager(_this.mac);
+    if (_this.options.onlyRefreshHtml) {
       needRefreshArr = needRefreshArr.filter(
         (item) => path.extname(item) === ".html"
       );
+      // 刷html文件以及它的父目录
       needRefreshArr = [
         ...needRefreshArr,
         ...needRefreshArr.map((item) => `${path.dirname(item)}/`),
       ];
     }
-    const _this = this;
-    //  Can refresh 100 one time
+    //  单次请求不能超过100个
     let refreshQueue = _array.chunk(needRefreshArr, 100);
     log(`Refreshing ${needRefreshArr.length} files...`);
-
+    log({refreshQueue})
     refreshQueue.forEach((item, index) => {
-      item = item.map((it) => {
+      const refreshUrlMap = item.map((e) => {
         return (
           this.options.publicPath +
-          it.replace(this.options.uploadTarget + "/", "")
+          e.replace(this.options.uploadTarget + "/", "")
         );
       });
-      cdnManager.refreshUrls(item, function (err, respBody, respInfo) {
+      cdnManager.refreshUrls(refreshUrlMap, function (err, respBody, respInfo) {
         if (err) {
           _this.allRefreshIsSuccess = false;
           _this.failedObj.refreshArr = _this.failedObj.refreshArr.concat(
-            item.map((it) => it.replace(_this.options.uploadTarget + "/", ""))
+            item.map((e) => e.replace(_this.options.uploadTarget + "/", ""))
           );
           console.error("Refresh Files Failed\r\n");
 
@@ -252,7 +195,6 @@ class UploadQiNiuPlugin {
           this.options.prefixPath
         ),
         token = this.getToken(this.options.qiniuBucket, key);
-
       this.uploadFile(token, key, filePath);
     });
   }
