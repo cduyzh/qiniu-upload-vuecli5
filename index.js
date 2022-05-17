@@ -86,7 +86,6 @@ class UploadQiNiuPlugin {
 
             paths.forEach((item) => {
               let key = path.relative(_this.options.uploadTarget, item);
-              console.log(item);
               if (_this.successUploadFilesData[key]) {
                 delete _this.successUploadFilesData[key];
               }
@@ -155,7 +154,6 @@ class UploadQiNiuPlugin {
     //  单次请求不能超过100个
     let refreshQueue = _array.chunk(needRefreshArr, 100);
     log(`Refreshing ${needRefreshArr.length} files...`);
-    log({refreshQueue})
     refreshQueue.forEach((item, index) => {
       const refreshUrlMap = item.map((e) => {
         return (
