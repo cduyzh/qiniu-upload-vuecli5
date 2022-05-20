@@ -4,7 +4,7 @@
       src="https://cli.vuejs.org/favicon.png">
   </a>
   <h1>Upload To qiniu cloud  webpack|vue-cli-Plugin</h1>
-  <h1>七牛云脚手架打包上传的插件封装，webpack5和vue-cli4|vue-cli5 plugin</h1>
+  <h1>Qiniu Cloud scaffolding package upload plug-in package，webpack5和vue-cli4|vue-cli5 plugin</h1>
   <p>A plugin upload file to qiniu clound for vue-cli4|vue-cli5</p>
 
 <p align="center">
@@ -12,19 +12,17 @@
     <img src="https://img.shields.io/npm/dm/webpack-plugin-qiniu-upload.svg?style=flat-square&color=#4fc08d" alt="downloads" />
 </p>
 </div>
-<h2 align="center">功能特点</h2>
+<h2 align="center">Features</h2>
 
-☁️  支持最新的sdk 七牛云上传，适配最新的vue脚手架cli4.0及5.0以上版本
+☁️ Support the latest SDK Qiniu Cloud upload, adapted to the latest VUE scaffolding CLI4.0 and 5.0 versions
 
-💪  适配最新的vue脚手架cli4.0及5.0以上版本，支持webpack5的配置
+💪 Suitable for the latest vue scaffolding cli4.0 and 5.0 versions, support webpack5 configuration
 
-💪  支持webpack5的配置
+💪 Webpack5 configuration is supported
 
-🚀  支持增量文件上传，告别所有资源重复上传并刷新文件的烦恼和等待时间
+🚀 Incremental file upload is supported, eliminating the annoyance and waiting time of repeatedly uploading and refreshing files for all resources
 
-
-
-<h2 align="center">安装</h2>
+<h2 align="center">Install</h2>
 
 ```bash
   pnpm add webpack-plugin-qiniu-upload -D
@@ -34,7 +32,7 @@
   yarn add webpack-plugin-qiniu-upload -D
 ```
 
-<h2 align="center">使用示例</h2>
+<h2 align="center">Use the sample</h2>
 
 **vue.config.js**
 
@@ -74,20 +72,13 @@ module.exports = {
 | **[`onlyRefreshHtml`](#)** | `{Boolean}` |                                             `false`                                              | only refresh html file (eg: _/demo/index.html + _/demo/), throws an exception in the case of a failure. |
 |   **[`prefixPath`](#)**    | `{String}`  |                                                -                                                 | prefix path for the file                                                                                |
 |   **[`fileLogPath`](#)**   | `{String}`  |                                              `log/`                                              | Provide a directory where log file should be stored                                                     |
-|   **[`publicPath`](#)**    | `{String}`  | [webpackConfig.output.publicPath](https://webpack.js.org/configuration/output/#outputpublicpath) | 你打包后的资源所带的前缀路径                                                                            |
-|  **[`uploadTarget`](#)**   | `{String}`  |      [webpackConfig.output.path](https://webpack.js.org/configuration/output/#output-path)       | 待上传的文件夹目录                                                                                      |
-|     **[`appName`](#)**     | `{Number}`  |  `Date.now()`       | 可选，用于生成资源映射文件日志的文件名                                                                  |
-
+|   **[`publicPath`](#)**    | `{String}`  | [webpackConfig.output.publicPath](https://webpack.js.org/configuration/output/#outputpublicpath) | The prefix path to your packaged resource                                                               |
+|  **[`uploadTarget`](#)**   | `{String}`  |      [webpackConfig.output.path](https://webpack.js.org/configuration/output/#output-path)       | Directory of the folder to be uploaded                                                                  |
+|     **[`appName`](#)**     | `{Number}`  |                                           `Date.now()`                                           | Optional. Name of the file used to generate resource mapping file logs                                                                  |
 
 About [qiniuZone](https://developer.qiniu.com/kodo/sdk/1289/nodejs):
 
-|      Name       | value      |
-| :-------------: | :--------- |
-| **[`华东`](#)** | "Zone_z0"  |
-| **[`华北`](#)** | "Zone_z1"  |
-| **[`华南`](#)** | "Zone_z2"  |
-| **[`北美`](#)** | "Zone_na0" |
+## TODO LIST
 
-## 待办事项
-- [x] 支持增量更新的文件上传
-- [ ] 支持日志文件清理或拉取范围筛选
+- [x] Supports incremental update file upload
+- [ ] Support log file cleaning or pull range filtering
