@@ -4,7 +4,7 @@
       src="https://cli.vuejs.org/favicon.png">
   </a>
   <h1>Upload To qiniu cloud  webpack|vue-cli-Plugin</h1>
-  <h1>Qiniu Cloud scaffolding package upload plug-in package，webpack5和vue-cli4|vue-cli5 plugin</h1>
+  <h1>Qiniu Cloud scaffolding package upload plug-in package，webpack5，vue-cli4|vue-cli5 plugin</h1>
   <p>A plugin upload file to qiniu clound for vue-cli4|vue-cli5</p>
 
 <p align="center">
