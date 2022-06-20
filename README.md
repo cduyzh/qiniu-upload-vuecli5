@@ -74,11 +74,13 @@ module.exports = {
 |   **[`fileLogPath`](#)**   | `{String}`  |                                              `log/`                                              | Provide a directory where log file should be stored                                                     |
 |   **[`publicPath`](#)**    | `{String}`  | [webpackConfig.output.publicPath](https://webpack.js.org/configuration/output/#outputpublicpath) | The prefix path to your packaged resource                                                               |
 |  **[`uploadTarget`](#)**   | `{String}`  |      [webpackConfig.output.path](https://webpack.js.org/configuration/output/#output-path)       | Directory of the folder to be uploaded                                                                  |
-|     **[`appName`](#)**     | `{Number}`  |                                           `Date.now()`                                           | Optional. Name of the file used to generate resource mapping file logs                                                                  |
+|     **[`appName`](#)**     | `{Number}`  |                                           `Date.now()`                                           | Optional. Name of the file used to generate resource mapping file logs                                  |
+|       **[`env`](#)**       | `{String}`  |                                          `development`                                           | The environment directory corresponding to the JSON file of log               |
 
 About [qiniuZone](https://developer.qiniu.com/kodo/sdk/1289/nodejs):
 
 ## TODO LIST
 
 - [x] Supports incremental update file upload
+- [x] Supports environment With log json file
 - [ ] Support log file cleaning or pull range filtering

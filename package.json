@@ -1,6 +1,6 @@
 {
     "name": "webpack-plugin-qiniu-upload",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "description": "Vue3,webpack-plugin-qiniu-upload for qiniu(七牛)|aws(亚马逊) cloud upload. support @vue/cli-service 5.0.x",
     "main": "index.js",
     "scripts": {},

@@ -29,7 +29,8 @@ class UploadQiNiuPlugin {
         onlyRefreshHtml: false,
         prefixPath: "",
         appName: Date.now(),
-        fileLogPath: 'log/'
+        fileLogPath: 'log/',
+        env: 'development',
       },
       options
     );
@@ -55,8 +56,10 @@ class UploadQiNiuPlugin {
     this.uploadCount = 0;
     this.fileCount = 0;
 
-    // 线上json资源映射文件地址
-    this.jsonFilePath = `${this.options.publicPath}${this.options?.fileLogPath || '/'}${this.options.appName}.json`
+    this.logJsonFileName = `${this.options.appName}-${this.options.env}`
+
+    // 线上log json资源映射文件地址
+    this.jsonFilePath = `${this.options.publicPath}${this.options?.fileLogPath || '/'}${this.logJsonFileName}.json`
     // 本地资源映射文件目录地址
     this.logLocalDirPath = `${this.options.uploadTarget}/${this.options?.fileLogPath || '/'}`
     // 需要新上传的文件列表
@@ -139,7 +142,7 @@ class UploadQiNiuPlugin {
         if (!fs.existsSync(_this.logLocalDirPath)) {
           fs.mkdirSync(_this.logLocalDirPath);
         }
-        const fd = fs.openSync(`${_this.logLocalDirPath}${_this.options.appName}.json`, 'w');
+        const fd = fs.openSync(`${_this.logLocalDirPath}${_this.logJsonFileName}.json`, 'w');
 
         fs.writeFileSync(fd,
           JSON.stringify(
@@ -157,7 +160,7 @@ class UploadQiNiuPlugin {
               )
           )
         )
-        _this.needUploadArray.push(`${_this.logLocalDirPath}${_this.options.appName}.json`);
+        _this.needUploadArray.push(`${_this.logLocalDirPath}${_this.logJsonFileName}.json`);
         log(`${chalk.green("Starting upload files to qiniu cloud")}`);
         log(
           `Uploading ${chalk.red(_this.needUploadArray.length)} files...`
