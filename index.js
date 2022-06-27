@@ -31,9 +31,11 @@ class UploadQiNiuPlugin {
         appName: Date.now(),
         fileLogPath: 'log/',
         env: 'development',
+        suffix: '' // cuttome suffix eg: '-v1', reset the old log file
       },
       options
     );
+    console.log({options: this.options})
     this.config = new qiniu.conf.Config();
     this.config.zone = qiniu.zone[this.options.qiniuZone];
     qiniu.conf.RPC_TIMEOUT = 600000;
@@ -59,9 +61,12 @@ class UploadQiNiuPlugin {
     this.logJsonFileName = `${this.options.appName}-${this.options.env}`
 
     // 线上log json资源映射文件地址
-    this.jsonFilePath = `${this.options.publicPath}${this.options?.fileLogPath || '/'}${this.logJsonFileName}.json`
+    this.jsonFilePath = `${this.options.publicPath}${this.options?.fileLogPath || '/'}${this.logJsonFileName}${this.options.suffix}.json`
     // 本地资源映射文件目录地址
     this.logLocalDirPath = `${this.options.uploadTarget}/${this.options?.fileLogPath || '/'}`
+    // 本地log文件存放地址
+    this.logLocalPath = `${this.logLocalDirPath}${this.logJsonFileName}${this.options.suffix}.json`
+    console.log('logLocalPath', this.logLocalPath)
     // 需要新上传的文件列表
     this.newFileList = []
     // 线上已存在的资源文件映射列表
@@ -94,7 +99,7 @@ class UploadQiNiuPlugin {
           const paths = await _this.readFilesFormDir(_this.options.uploadTarget)
 
           try {
-            log({jsonfilepath: _this.jsonFilePath})
+            log('get data from url:', _this.jsonFilePath)
             // TODO:用过原生node https模块 序列化json数据的时候，数据量过大会出现 问题，没有解决到，所以换了axios来代替发送请求，如果可以舍弃axios用node模块减少依赖更好
             const res = await axios.get(_this.jsonFilePath, {
               params: {
@@ -142,7 +147,7 @@ class UploadQiNiuPlugin {
         if (!fs.existsSync(_this.logLocalDirPath)) {
           fs.mkdirSync(_this.logLocalDirPath);
         }
-        const fd = fs.openSync(`${_this.logLocalDirPath}${_this.logJsonFileName}.json`, 'w');
+        const fd = fs.openSync(`${_this.logLocalPath}`, 'w');
 
         fs.writeFileSync(fd,
           JSON.stringify(
@@ -160,7 +165,7 @@ class UploadQiNiuPlugin {
               )
           )
         )
-        _this.needUploadArray.push(`${_this.logLocalDirPath}${_this.logJsonFileName}.json`);
+        _this.needUploadArray.push(`${_this.logLocalPath}`);
         log(`${chalk.green("Starting upload files to qiniu cloud")}`);
         log(
           `Uploading ${chalk.red(_this.needUploadArray.length)} files...`
@@ -243,6 +248,8 @@ class UploadQiNiuPlugin {
         if (respInfo.statusCode == 200) {
           log(chalk.cyan("\nRefreshInCloud Files Successful \n"));
           log(chalk.green("Finish upload files to qiniu cloud \n"));
+          // 删除本地的log文件
+          fs.unlinkSync(`${_this.logLocalPath}`)
         }
         if (index === refreshQueue.length - 1) {
           _this.callback();
