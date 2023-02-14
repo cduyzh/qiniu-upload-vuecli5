@@ -38,21 +38,28 @@
 
 ```js
 const UploadQiNiuPlugin = require("webpack-plugin-thirdparty-upload");
+const isBuildDev = process.env.buildMode === 'dev'
 
 module.exports = {
   ...,
   plugins: [
-    new UploadQiNiuPlugin({
-      qiniuAccessKey: "xxxx",
-      qiniuSecretKey: "xxxxx",
-      qiniuBucket: "xxx",
-      qiniuZone: "Zone_z0",
-      enabledRefresh: true,
-      publicPath: 'https://www.yourdomain.com/',
-      uploadTarget: path.resolve(__dirname, './dist'),
-      appName: 'xxxx',
-      fileLogPath: 'log/'
-    }),
+    uploadPlugin({
+        sdkName: isBuildDev ? 'qiniu' : 'aws',
+        accessKey: isBuildDev ? process.env.QN_ACCESS_KEY : process.env.AWS_ACCESS_KEY,
+        secretKey: isBuildDev ? process.env.QN_SECRET_KEY : process.env.AWS_SECRET_KEY,
+        bucket: isBuildDev ? process.env.QN_BUCKET : process.env.AWS_BUCKET,
+        region: isBuildDev ? 'Zone_z2' : 'us-east-1',
+        awsDistributionId: 'xxxx', // aws的失效id
+        enabledRefresh: true,
+        publicPath: process.env.logBaseUrl,
+        uploadTarget: path.resolve(__dirname, './dist'),
+        appName: webpackEntry.EntryConfigs[argv.e].filename.replaceAll('.html', ''),
+        fileLogPath: 'log/',
+        env: isBuildDev ? 'development' : 'production',
+        htmlPath: htmlPath, // html 存到云的路径
+        excludeHtml: false, // 是否排除html文件
+        // suffix: '-v1'
+    })
   ],
 };
 ```
@@ -75,7 +82,7 @@ module.exports = {
 |   **[`publicPath`](#)**    | `{String}`  | [webpackConfig.output.publicPath](https://webpack.js.org/configuration/output/#outputpublicpath) | The prefix path to your packaged resource                                                               |
 |  **[`uploadTarget`](#)**   | `{String}`  |      [webpackConfig.output.path](https://webpack.js.org/configuration/output/#output-path)       | Directory of the folder to be uploaded                                                                  |
 |     **[`appName`](#)**     | `{Number}`  |                                           `Date.now()`                                           | Optional. Name of the file used to generate resource mapping file logs                                  |
-|       **[`env`](#)**       | `{String}`  |                                          `development`                                           | The environment directory corresponding to the JSON file of log               |
+|       **[`env`](#)**       | `{String}`  |                                          `development`                                           | The environment directory corresponding to the JSON file of log                                         |
 
 About [qiniuZone](https://developer.qiniu.com/kodo/sdk/1289/nodejs):
 
