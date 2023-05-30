@@ -10,8 +10,6 @@ const chalk = require("chalk");
 const axios = require('axios');
 const AWS = require("aws-sdk");
 const mime = require('mime');
-// Set the AWS Region.
-const REGION = "us-east-1";
 
 const fsStatPromise = promisify(fs.stat);
 const fsReadDirPromise = promisify(fs.readdir);
@@ -55,9 +53,9 @@ class Upload {
 		this.logJsonFileName = `${this.options.appName}-${this.options.env}`
 
 		// 线上log json资源映射文件地址
-		this.jsonFilePath = `${this.options.publicPath}${this.options?.fileLogPath || '/'}${this.logJsonFileName}${this.options.suffix}.json`
+		this.jsonFilePath = `${this.options.publicPath}${this.options.fileLogPath || '/'}${this.logJsonFileName}${this.options.suffix}.json`
 		// 本地资源映射文件目录地址
-		this.logLocalDirPath = `${this.options.uploadTarget}/${this.options?.fileLogPath || '/'}`
+		this.logLocalDirPath = `${this.options.uploadTarget}/${this.options.fileLogPath || '/'}`
 		// 本地log文件存放地址
 		this.logLocalPath = `${this.logLocalDirPath}${this.logJsonFileName}${this.options.suffix}.json`
 		console.log('logLocalPath', this.logLocalPath)
@@ -389,7 +387,7 @@ class UploadAwsPlugin extends Upload {
 				this.options.uploadTarget + "/",
 				'')
 			if (!this.options.excludeHtml && key.includes('.html')) {
-				return ("/" + this.options.htmlPath + key).replaceAll('//', '/')
+				return ("/" + this.options.htmlPath + key).replace('//', '/')
 			} else {
 				return key
 			}
